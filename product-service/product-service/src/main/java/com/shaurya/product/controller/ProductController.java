@@ -1,9 +1,12 @@
 package com.shaurya.product.controller;
 
+import com.shaurya.product.dto.ProductPageResponse;
 import com.shaurya.product.dto.ProductRequest;
 import com.shaurya.product.dto.ProductResponse;
 import com.shaurya.product.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +33,11 @@ public class ProductController {
     public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id){
         ProductResponse response = productService.getProductById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ProductPageResponse> getAllProducts(Pageable pageable){
+        ProductPageResponse response = productService.getAllProducts(pageable);
+        return  ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

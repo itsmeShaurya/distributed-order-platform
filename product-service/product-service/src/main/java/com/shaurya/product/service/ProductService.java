@@ -1,10 +1,13 @@
 package com.shaurya.product.service;
 
+import com.shaurya.product.dto.ProductPageResponse;
 import com.shaurya.product.dto.ProductRequest;
 import com.shaurya.product.dto.ProductResponse;
 import com.shaurya.product.entity.Product;
 import com.shaurya.product.exception.ProductNotFoundException;
 import com.shaurya.product.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,5 +50,30 @@ public class ProductService {
                 product.getCategory(),
                 product.getCreatedAt(),
                 product.getUpdatedAt());
+    }
+
+    public ProductPageResponse getAllProducts(Pageable pageable){
+        Page<Product> products = productRepository.findAll(pageable);
+
+        Page<ProductResponse> productResponses = products.map(product ->
+                new ProductResponse(
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription(),
+                        product.getPrice(),
+                        product.getCategory(),
+                        product.getCreatedAt(),
+                        product.getUpdatedAt()
+                )
+        );
+        return new ProductPageResponse(
+                productResponses.getContent(),
+                productResponses.getNumber(),
+                productResponses.getSize(),
+                productResponses.getTotalElements(),
+                productResponses.getTotalPages(),
+                productResponses.isFirst(),
+                productResponses.isLast()
+        );
     }
 }
