@@ -25,4 +25,10 @@ public class ProductController {
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id){
+        ProductResponse response = productService.getProductById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

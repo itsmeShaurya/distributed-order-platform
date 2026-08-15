@@ -3,6 +3,7 @@ package com.shaurya.product.service;
 import com.shaurya.product.dto.ProductRequest;
 import com.shaurya.product.dto.ProductResponse;
 import com.shaurya.product.entity.Product;
+import com.shaurya.product.exception.ProductNotFoundException;
 import com.shaurya.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +34,18 @@ public class ProductService {
                 savedProduct.getCreatedAt(),
                 savedProduct.getUpdatedAt()
         );
+    }
+
+    public ProductResponse getProductById(Long id){
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+
+        return new ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getCategory(),
+                product.getCreatedAt(),
+                product.getUpdatedAt());
     }
 }
