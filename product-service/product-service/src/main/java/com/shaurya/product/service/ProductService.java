@@ -76,4 +76,30 @@ public class ProductService {
                 productResponses.isLast()
         );
     }
+
+    public ProductResponse updateProduct(ProductRequest request, Long id){
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+
+        product.setName(request.name());
+        product.setDescription(request.description());
+        product.setPrice(request.price());
+        product.setCategory(request.category());
+
+        Product updatedProduct = productRepository.save(product);
+
+        return new ProductResponse(
+                updatedProduct.getId(),
+                updatedProduct.getName(),
+                updatedProduct.getDescription(),
+                updatedProduct.getPrice(),
+                updatedProduct.getCategory(),
+                updatedProduct.getCreatedAt(),
+                updatedProduct.getUpdatedAt()
+        );
+    }
+
+    public void deleteProduct(Long id){
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+        productRepository.delete(product);
+    }
 }
